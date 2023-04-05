@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.greedy.crud.menu.model.dao.MenuMapper">
+
+    <resultMap id="menuResultMap" type="com.greedy.crud.menu.model.dto.MenuDTO">
+        <id property="code" column="MENU_CODE"/>
+        <result property="name" column="MENU_NAME"/>
+        <result property="price" column="MENU_PRICE"/>
+        <result property="categoryCode" column="CATEGORY_CODE"/>
+        <result property="orderableStatus" column="ORDERABLE_STATUS"/>
+    </resultMap>
+
+    <resultMap id="categoryResultMap" type="com.greedy.crud.menu.model.dto.CategoryDTO">
+        <id property="code" column="CATEGORY_CODE"/>
+        <result property="name" column="CATEGORY_NAME"/>
+        <result property="refCategoryCode" column="REF_CATEGORY_CODE"/>
+    </resultMap>
+
+    <select id="findAllMenus" resultMap="menuResultMap">
+        SELECT
+        A.MENU_CODE
+        , A.MENU_NAME
+        , A.MENU_PRICE
+        , A.CATEGORY_CODE
+        , A.ORDERABLE_STATUS
+        FROM TBL_MENU A
+        WHERE A.ORDERABLE_STATUS = 'Y'
+        ORDER BY A.MENU_CODE
+    </select>
+
+    <select id="findAllCategories" resultMap="categoryResultMap">
+        SELECT
+        A.CATEGORY_CODE
+        , A.CATEGORY_NAME
+        , A.REF_CATEGORY_CODE
+        FROM TBL_CATEGORY A
+    </select>
+
+    <insert id="registNewMenu" parameterType="com.greedy.crud.menu.model.dto.MenuDTO">
+        INSERT
+        INTO TBL_MENU A
+        (
+        A.MENU_CODE
+        , A.MENU_NAME
+        , A.MENU_PRICE
+        , A.CATEGORY_CODE
+        , A.ORDERABLE_STATUS
+        )
+        VALUES
+        (
+        SEQ_MENU_CODE.NEXTVAL
+        , #{ name }
+        , #{ price }
+        , #{ categoryCode }
+        , #{ orderableStatus }
+        )
+    </insert>
+</mapper>
